@@ -1,0 +1,143 @@
+<Window x:Class="ClientVisitManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Client Visit Manager" Height="720" Width="1080"
+        MinHeight="600" MinWidth="900"
+        WindowStartupLocation="CenterScreen"
+        Background="#FEF7FF">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#6750A4"/>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#FEF7FF"/>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="SurfaceVariantBrush" Color="#F3EDF7"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#1D1B20"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#49454F"/>
+        <SolidColorBrush x:Key="WhatsAppGreenBrush" Color="#25D366"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#CAC4D0"/>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" CornerRadius="12" Padding="16" Margin="0,0,0,16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                    <Border Width="40" Height="40" CornerRadius="10" Background="{StaticResource PrimaryBrush}" Margin="0,0,12,0">
+                        <TextBlock Text="👤" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Client Visit Manager" FontSize="18" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBlock Text="{Binding UserEmail}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <TabControl SelectedIndex="{Binding SelectedTabIndex}" Background="Transparent" BorderThickness="0">
+                <TabItem Header="New Client Visit">
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="0.8*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}" CornerRadius="16" Padding="20" Margin="0,0,10,0" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Record Client Visit" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Client Full Name" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding ClientName, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6" Margin="0,0,0,12"/>
+
+                                <TextBlock Text="Mobile Number (e.g. 919876543210)" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding ClientPhone, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6" Margin="0,0,0,16"/>
+
+                                <TextBlock Text="Select Service / Notes" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                                <WrapPanel Margin="0,0,0,20">
+                                    <Button Content="Hair Cut" Command="{Binding SelectServiceCommand}" CommandParameter="Hair Cut" Margin="0,0,8,8" Padding="10,5"/>
+                                    <Button Content="Facial &amp; Spa" Command="{Binding SelectServiceCommand}" CommandParameter="Facial &amp; Spa" Margin="0,0,8,8" Padding="10,5"/>
+                                    <Button Content="Beard Grooming" Command="{Binding SelectServiceCommand}" CommandParameter="Beard Grooming" Margin="0,0,8,8" Padding="10,5"/>
+                                    <Button Content="Consultation" Command="{Binding SelectServiceCommand}" CommandParameter="Consultation" Margin="0,0,8,8" Padding="10,5"/>
+                                </WrapPanel>
+
+                                <Button Content="Save &amp; Schedule Visit" Command="{Binding SaveClientCommand}" Background="{StaticResource PrimaryBrush}" Foreground="White" Height="42" FontWeight="Bold" Cursor="Hand"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="1" Background="{StaticResource SurfaceBrush}" CornerRadius="16" Padding="20" Margin="10,0,0,0" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                            <DockPanel>
+                                <TextBlock Text="Recent Logged Visits" DockPanel.Dock="Top" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                                <ListBox ItemsSource="{Binding AllClients}" Background="Transparent" BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{StaticResource SurfaceVariantBrush}" CornerRadius="10" Padding="10" Margin="0,0,0,8">
+                                                <DockPanel>
+                                                    <StackPanel DockPanel.Dock="Left">
+                                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                                        <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                        <TextBlock Text="{Binding Notes}" FontSize="11" Foreground="{StaticResource PrimaryBrush}"/>
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding VisitTimestamp, StringFormat=\{0:hh:mm tt\}}" DockPanel.Dock="Right" VerticalAlignment="Center" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                </DockPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="View &amp; Broadcast">
+                    <Grid Margin="0,10,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" CornerRadius="16" Padding="16" Margin="0,0,0,12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="WhatsApp Broadcast &amp; Offer Templates" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+                                <TextBox Text="{Binding OfferTemplate, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" Height="60" Padding="8" Margin="0,0,0,8"/>
+                                <DockPanel>
+                                    <Button Content="Send All Clients (WhatsApp Wizard)" Command="{Binding BroadcastCommand}" Background="{StaticResource WhatsAppGreenBrush}" Foreground="White" FontWeight="Bold" Padding="14,6" DockPanel.Dock="Right" Cursor="Hand"/>
+                                    <TextBlock Text="Quick Offers Setup Ready" VerticalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </DockPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" CornerRadius="16" Padding="16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                            <DockPanel>
+                                <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Width="300" Height="32" Padding="6,4" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="0,0,0,12" ToolTip="Search by name or number..."/>
+                                <DataGrid ItemsSource="{Binding FilteredClients}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column" Background="Transparent" BorderThickness="0">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="1.5*"/>
+                                        <DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" Width="1.2*"/>
+                                        <DataGridTextColumn Header="Service / Note" Binding="{Binding Notes}" Width="1.5*"/>
+                                        <DataGridTextColumn Header="Visit Date" Binding="{Binding VisitTimestamp, StringFormat=\{0:dd MMM yyyy hh:mm tt\}}" Width="1.8*"/>
+                                        <DataGridTemplateColumn Header="Actions" Width="2*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Button Content="WhatsApp" Command="{Binding DataContext.WhatsAppCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Background="{StaticResource WhatsAppGreenBrush}" Foreground="White" Margin="0,0,4,0" Padding="8,2"/>
+                                                        <Button Content="SMS" Command="{Binding DataContext.SmsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Margin="0,0,4,0" Padding="8,2"/>
+                                                        <Button Content="Call" Command="{Binding DataContext.CallCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Margin="0,0,4,0" Padding="8,2"/>
+                                                        <Button Content="Delete" Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Foreground="Red" Padding="8,2"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>
